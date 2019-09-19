@@ -34,7 +34,15 @@ class Counter extends Component {
   // };
 
   handleInc = () => {
-    this.setState({ countValue: this.state.countValue + 1 });
+    this.setState(prevState => ({
+      countValue: prevState.countValue - 2
+    }));
+    this.setState(prevState => ({
+      countValue: prevState.countValue + 17
+    }));
+    this.setState(prevState => ({
+      countValue: prevState.countValue - 10
+    }));
   };
 
   handleDec = () => {
