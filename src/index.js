@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import Movies from "./components/movies";
+import App from "./App";
 import "bootstrap/dist/css/bootstrap.css";
 
-ReactDOM.render(<Movies />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById("root"));

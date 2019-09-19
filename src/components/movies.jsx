@@ -1,13 +1,11 @@
 import React, { Component } from "react";
-import { getMovies } from "../services/fakeMovieService";
-class Movies extends Component {
-  state = {
-    movies: getMovies()
-  };
 
+import Movie from "./movie";
+
+class Movies extends Component {
   render() {
     return (
-      <div className="container">
+      <div className="container mt-5">
         <table className="table">
           <thead>
             <tr>
@@ -18,16 +16,12 @@ class Movies extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.movies.map(movie => (
-              <tr key={movie._id}>
-                <th>{movie.title}</th>
-                <td>{movie.genre.name}</td>
-                <td>{movie.numberInStock}</td>
-                <td>{movie.dailyRentalRate}</td>
-                <td>
-                  <button className="btn btn-danger">Delete</button>
-                </td>
-              </tr>
+            {this.props.movies.map(movie => (
+              <Movie
+                key={movie._id}
+                movie={movie}
+                onDelete={() => this.props.onDelete(movie._id)}
+              />
             ))}
           </tbody>
         </table>
