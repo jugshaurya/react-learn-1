@@ -10,6 +10,7 @@ const Movie = props => {
     liked
   } = props.movie;
 
+  const { onLikeToggle, onDelete } = props;
   let likedClass = "fa fa-heart";
   if (!liked) {
     likedClass += "-o";
@@ -17,15 +18,15 @@ const Movie = props => {
 
   return (
     <tr>
-      <th>{title}</th>
+      <td>{title}</td>
       <td>{genre.name}</td>
       <td>{numberInStock}</td>
       <td>{dailyRentalRate}</td>
-      <td onClick={() => props.onLikeToggle(_id)}>
+      <td onClick={() => onLikeToggle(_id)}>
         <i className={likedClass} aria-hidden="true"></i>
       </td>
       <td>
-        <button className="btn btn-danger" onClick={() => props.onDelete(_id)}>
+        <button className="btn btn-danger" onClick={() => onDelete(_id)}>
           Delete
         </button>
       </td>

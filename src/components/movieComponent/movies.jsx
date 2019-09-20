@@ -1,6 +1,7 @@
 import React from "react";
 import Movie from "./movie";
 const Movies = props => {
+  const { movies, onDelete, onLikeToggle } = props;
   return (
     <div className="container mt-5">
       <table className="table">
@@ -15,12 +16,12 @@ const Movies = props => {
           </tr>
         </thead>
         <tbody>
-          {props.movies.map(movie => (
+          {movies.map(movie => (
             <Movie
               key={movie._id}
               movie={movie}
-              onDelete={props.onDelete}
-              onLikeToggle={props.onLikeToggle}
+              onDelete={onDelete}
+              onLikeToggle={onLikeToggle}
             />
           ))}
         </tbody>
