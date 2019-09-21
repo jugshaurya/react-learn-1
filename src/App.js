@@ -14,7 +14,8 @@ import { getMovies } from "./services/fakeMovieService";
 import { getGenres } from "./services/fakeGenreService";
 import {
   paginate,
-  filterMovies
+  filterMovies,
+  sortMovies
 } from "./components/movieComponent/utils/helper";
 
 class App extends React.Component {
@@ -25,7 +26,8 @@ class App extends React.Component {
       pageSize: 4,
       currentPage: 1,
       genres: getGenres(),
-      currentGenre: "all"
+      currentGenre: "all",
+      sortingField: ""
     };
   }
 
@@ -54,11 +56,26 @@ class App extends React.Component {
     this.setState({ currentGenre: genreName, currentPage: 1 });
   };
 
+  handleSorting = field => {
+    this.setState({ sortingField: field });
+  };
+
   render() {
-    const { movies, pageSize, currentPage, genres, currentGenre } = this.state;
+    const {
+      movies,
+      pageSize,
+      currentPage,
+      genres,
+      currentGenre,
+      sortingField
+    } = this.state;
 
     const filteredMovies = filterMovies(movies, currentGenre);
-    const pageMovies = paginate(filteredMovies, currentPage, pageSize);
+    const sortedMovies =
+      sortingField === ""
+        ? filteredMovies
+        : sortMovies(filteredMovies, sortingField);
+    const pageMovies = paginate(sortedMovies, currentPage, pageSize);
 
     return (
       <>
@@ -77,6 +94,7 @@ class App extends React.Component {
                 movies={pageMovies}
                 onDelete={this.handleDelete}
                 onLikeToggle={this.handleLikeToggle}
+                onSort={this.handleSorting}
               />
               <Pagination
                 pageSize={pageSize}
