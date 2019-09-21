@@ -68,7 +68,80 @@ const movies = [
   },
   {
     _id: "5b21ca3eeb7f6fbccd471821",
-    title: "The Avengers",
+    title: "The Avengers325",
+    genre: { _id: "5b21ca3eeb7f6fbccd471818", name: "Action" },
+    numberInStock: 7,
+    dailyRentalRate: 3.5,
+    liked: true
+  },
+  {
+    _id: "5b21ca3eeb7f6fbccd471822",
+    title: "Terminator214",
+    genre: { _id: "5b21ca3eeb7f6fbccd471818", name: "Action" },
+    numberInStock: 6,
+    dailyRentalRate: 2.5,
+    publishDate: "2018-01-03T19:04:28.809Z",
+    liked: true
+  },
+  {
+    _id: "5b21ca3eeb7f6fbccd471823",
+    title: "Die Hard2133",
+    genre: { _id: "5b21ca3eeb7f6fbccd471818", name: "Action" },
+    numberInStock: 5,
+    dailyRentalRate: 2.5,
+    liked: true
+  },
+  {
+    _id: "5b21ca3eeb7f6fbccd471824",
+    title: "Get Out123",
+    genre: { _id: "5b21ca3eeb7f6fbccd471820", name: "Thriller" },
+    numberInStock: 8,
+    dailyRentalRate: 3.5,
+    liked: true
+  },
+  {
+    _id: "5b21ca3eeb7f6fbccd471825",
+    title: "Trip to Italy123",
+    genre: { _id: "5b21ca3eeb7f6fbccd471814", name: "Comedy" },
+    numberInStock: 7,
+    dailyRentalRate: 3.5,
+    liked: true
+  },
+  {
+    _id: "5b21ca3eeb7f6fbccd471826",
+    title: "Airplane123",
+    genre: { _id: "5b21ca3eeb7f6fbccd471814", name: "Comedy" },
+    numberInStock: 7,
+    dailyRentalRate: 3.5,
+    liked: true
+  },
+  {
+    _id: "5b21ca3eeb7f6fbccd47181b27",
+    title: "Wedding Crashers123",
+    genre: { _id: "5b21ca3eeb7f6fbccd471814", name: "Comedy" },
+    numberInStock: 7,
+    dailyRentalRate: 3.5,
+    liked: true
+  },
+  {
+    _id: "5b21ca3eeb7f6fbccd471828",
+    title: "Gone Girl1213",
+    genre: { _id: "5b21ca3eeb7f6fbccd471820", name: "Thriller" },
+    numberInStock: 7,
+    dailyRentalRate: 4.5,
+    liked: false
+  },
+  {
+    _id: "5b21ca3eeb7f6fbccd47181f29",
+    title: "The Sixth Sensedsd",
+    genre: { _id: "5b21ca3eeb7f6fbccd471820", name: "Thriller" },
+    numberInStock: 4,
+    dailyRentalRate: 3.5,
+    liked: true
+  },
+  {
+    _id: "5b21ca3eeb7f6fbccd471830",
+    title: "The Avengerssd,b",
     genre: { _id: "5b21ca3eeb7f6fbccd471818", name: "Action" },
     numberInStock: 7,
     dailyRentalRate: 3.5,

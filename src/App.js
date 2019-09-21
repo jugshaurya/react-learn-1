@@ -1,9 +1,21 @@
 import React from "react";
+
+// Dependency-Components
 import Navbar from "./components/movieComponent/navbar";
 import Movies from "./components/movieComponent/movies";
-import { getMovies } from "./services/fakeMovieService";
-import "./App.css";
 import Pagination from "./components/movieComponent/pagination";
+import ListGroup from "./components/movieComponent/listgroup";
+
+// Styling
+import "./App.css";
+
+//  helper function
+import { getMovies } from "./services/fakeMovieService";
+import { getGenres } from "./services/fakeGenreService";
+import {
+  paginate,
+  filterMovies
+} from "./components/movieComponent/utils/helper";
 
 class App extends React.Component {
   constructor() {
@@ -11,7 +23,9 @@ class App extends React.Component {
     this.state = {
       movies: getMovies(),
       pageSize: 4,
-      currentPage: 1
+      currentPage: 1,
+      genres: getGenres(),
+      currentGenre: "all"
     };
   }
 
@@ -22,11 +36,11 @@ class App extends React.Component {
 
   handleLikeToggle = id => {
     const movies = this.state.movies.map(movie => {
-      const DeepCopiedmovie = { ...movie };
-      if (DeepCopiedmovie._id === id) {
-        DeepCopiedmovie.liked = !DeepCopiedmovie.liked;
+      const movieCopy = { ...movie };
+      if (movieCopy._id === id) {
+        movieCopy.liked = !movieCopy.liked;
       }
-      return DeepCopiedmovie;
+      return movieCopy;
     });
 
     this.setState({ movies });
@@ -36,41 +50,43 @@ class App extends React.Component {
     this.setState({ currentPage: pageNumber });
   };
 
-  pageMovies = () => {
-    const { movies, currentPage, pageSize } = this.state;
-    const pageMovieStartingPoint = (currentPage - 1) * pageSize;
-    const pageMovieEndingPoint = pageMovieStartingPoint + pageSize;
-
-    const moviesForPage = [];
-    for (
-      let i = pageMovieStartingPoint;
-      i < pageMovieEndingPoint && i < movies.length;
-      i++
-    ) {
-      moviesForPage.push({
-        ...movies[i]
-      });
-    }
-
-    return moviesForPage;
+  handleGenrePick = genreName => {
+    this.setState({ currentGenre: genreName, currentPage: 1 });
   };
 
   render() {
-    const { movies, pageSize, currentPage } = this.state;
+    const { movies, pageSize, currentPage, genres, currentGenre } = this.state;
+
+    const filteredMovies = filterMovies(movies, currentGenre);
+    const pageMovies = paginate(filteredMovies, currentPage, pageSize);
+
     return (
       <>
         <Navbar moviesCount={movies.length} />
-        <Movies
-          movies={this.pageMovies()}
-          onDelete={this.handleDelete}
-          onLikeToggle={this.handleLikeToggle}
-        />
-        <Pagination
-          pageSize={pageSize}
-          totalItems={movies.length}
-          onPaginate={this.handlePagination}
-          currentPage={currentPage}
-        />
+        <div className="container">
+          <div className="row">
+            <div className="col-3 mt-5">
+              <ListGroup
+                genres={genres}
+                onGenrePick={this.handleGenrePick}
+                activeGenre={currentGenre}
+              />
+            </div>
+            <div className="col mt-5">
+              <Movies
+                movies={pageMovies}
+                onDelete={this.handleDelete}
+                onLikeToggle={this.handleLikeToggle}
+              />
+              <Pagination
+                pageSize={pageSize}
+                totalItems={filteredMovies.length}
+                onPaginate={this.handlePagination}
+                currentPage={currentPage}
+              />
+            </div>
+          </div>
+        </div>
       </>
     );
   }
