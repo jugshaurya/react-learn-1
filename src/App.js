@@ -27,7 +27,8 @@ class App extends React.Component {
       currentPage: 1,
       genres: getGenres(),
       currentGenre: "all",
-      sortingField: ""
+      sortingField: "",
+      order: "asc"
     };
   }
 
@@ -57,7 +58,14 @@ class App extends React.Component {
   };
 
   handleSorting = field => {
-    this.setState({ sortingField: field });
+    if (this.state.sortingField === field) {
+      // toggle the order
+      const order = this.state.order === "asc" ? "desc" : "asc";
+      this.setState({ order: order });
+    } else {
+      // default it to 'asc' order
+      this.setState({ sortingField: field, order: "asc" });
+    }
   };
 
   render() {
@@ -67,14 +75,15 @@ class App extends React.Component {
       currentPage,
       genres,
       currentGenre,
-      sortingField
+      sortingField,
+      order
     } = this.state;
 
     const filteredMovies = filterMovies(movies, currentGenre);
     const sortedMovies =
       sortingField === ""
         ? filteredMovies
-        : sortMovies(filteredMovies, sortingField);
+        : sortMovies(filteredMovies, sortingField, order);
     const pageMovies = paginate(sortedMovies, currentPage, pageSize);
 
     return (
@@ -95,6 +104,8 @@ class App extends React.Component {
                 onDelete={this.handleDelete}
                 onLikeToggle={this.handleLikeToggle}
                 onSort={this.handleSorting}
+                orderBy={order}
+                sortingField={sortingField}
               />
               <Pagination
                 pageSize={pageSize}
