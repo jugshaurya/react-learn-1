@@ -1,20 +1,26 @@
 import React from "react";
 import Movie from "./movie";
-const Movies = props => {
+const MoviesTable = props => {
   const {
     movies,
     onDelete,
     onLikeToggle,
     onSort,
     sortingField,
-    orderBy
+    orderBy,
+    totalItems
   } = props;
 
   const arrow =
     orderBy === "asc" ? "fa fa-sort-up ml-2" : "fa fa-sort-down ml-2";
 
   return (
-    <div className="container mt-5">
+    <div className="mt-5">
+      <h3>
+        There are {totalItems === 0 ? "no more" : totalItems} movies in DB.
+      </h3>
+      <br />
+      <br />
       <small> Click on Table Heading to sort by asc or desc</small>
       <table className="table">
         <thead>
@@ -62,4 +68,4 @@ const Movies = props => {
   );
 };
 
-export default Movies;
+export default MoviesTable;
