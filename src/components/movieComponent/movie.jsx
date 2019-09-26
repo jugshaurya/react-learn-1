@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
 const Movie = props => {
   const {
     title,
@@ -18,7 +18,9 @@ const Movie = props => {
 
   return (
     <tr>
-      <td>{title}</td>
+      <td>
+        <Link to={"/movies/" + _id}>{title}</Link>
+      </td>
       <td>{genre.name}</td>
       <td>{numberInStock}</td>
       <td>{dailyRentalRate}</td>

@@ -15,11 +15,10 @@ const MoviesTable = props => {
     orderBy === "asc" ? "fa fa-sort-up ml-2" : "fa fa-sort-down ml-2";
 
   return (
-    <div className="mt-5">
-      <h3>
+    <>
+      <h4>
         There are {totalItems === 0 ? "no more" : totalItems} movies in DB.
-      </h3>
-      <br />
+      </h4>
       <br />
       <small> Click on Table Heading to sort by asc or desc</small>
       <table className="table">
@@ -64,7 +63,7 @@ const MoviesTable = props => {
           ))}
         </tbody>
       </table>
-    </div>
+    </>
   );
 };
 
