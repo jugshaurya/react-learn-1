@@ -1,6 +1,6 @@
 import React from "react";
 
-const LaterPage = props => {
+const NotFoundPage = props => {
   return (
     <div className="container">
       <h3>Not-Found</h3>
@@ -8,4 +8,4 @@ const LaterPage = props => {
   );
 };
 
-export default LaterPage;
+export default NotFoundPage;

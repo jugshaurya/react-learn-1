@@ -1,5 +1,6 @@
 import React from "react";
 import Movie from "./movie";
+
 const MoviesTable = props => {
   const {
     movies,
@@ -21,6 +22,7 @@ const MoviesTable = props => {
       </h4>
       <br />
       <small> Click on Table Heading to sort by asc or desc</small>
+
       <table className="table">
         <thead>
           <tr>

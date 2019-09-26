@@ -1,24 +1,24 @@
 import React from "react";
 
 // Dependency-Components
-import MoviesTable from "./moviesTable";
-import Pagination from "./pagination";
-import ListGroup from "./listgroup";
+import MoviesTable from "../moviesTable";
+import Pagination from "../pagination";
+import ListGroup from "../listgroup";
 
 //  helper function
-import { getMovies } from "./services/fakeMovieService";
-import { getGenres } from "./services/fakeGenreService";
-import { paginate, filterMovies, sortMovies } from "./utils/helper";
+import { getMovies } from "../services/fakeMovieService";
+import { getGenres } from "../services/fakeGenreService";
+import { filterMovies, sortMovies, paginate } from "../utils/helper";
 
 class MoviesPage extends React.Component {
   constructor() {
     super();
     this.state = {
       movies: getMovies(),
-      pageSize: 4,
-      currentPage: 1,
       genres: getGenres(),
       currentGenre: "all",
+      pageSize: 4,
+      currentPage: 1,
       sortingField: "title",
       order: "asc"
     };
@@ -71,39 +71,37 @@ class MoviesPage extends React.Component {
       order
     } = this.state;
 
+    // Filtering - Sorting - Pagination
     const filteredMovies = filterMovies(movies, currentGenre);
-    const sortedMovies =
-      sortingField === ""
-        ? filteredMovies
-        : sortMovies(filteredMovies, sortingField, order);
+    const sortedMovies = sortMovies(filteredMovies, sortingField, order);
     const pageMovies = paginate(sortedMovies, currentPage, pageSize);
 
     return (
       <>
         <div className="container">
-          <div className="row">
-            <div className="col-3 mt-5">
+          <div className="row mt-5">
+            <div className="col-3">
               <ListGroup
                 genres={genres}
-                onGenrePick={this.handleGenrePick}
                 activeGenre={currentGenre}
+                onGenrePick={this.handleGenrePick}
               />
             </div>
-            <div className="col mt-5">
+            <div className="col">
               <MoviesTable
                 movies={pageMovies}
+                sortingField={sortingField}
+                totalItems={filteredMovies.length}
                 onDelete={this.handleDelete}
                 onLikeToggle={this.handleLikeToggle}
                 onSort={this.handleSorting}
                 orderBy={order}
-                sortingField={sortingField}
-                totalItems={filteredMovies.length}
               />
               <Pagination
                 pageSize={pageSize}
                 totalItems={filteredMovies.length}
-                onPaginate={this.handlePagination}
                 currentPage={currentPage}
+                onPaginate={this.handlePagination}
               />
             </div>
           </div>

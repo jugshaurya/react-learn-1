@@ -1,11 +1,16 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
 import { BrowserRouter } from "react-router-dom";
+import ReactDOM from "react-dom";
 
-// import Counters from "./components/counters";
+import App from "./App";
+
+//Styling
+import "./index.css";
 import "bootstrap/dist/css/bootstrap.css";
+import "font-awesome/css/font-awesome.css";
+
+// Rendering
+
 ReactDOM.render(
   <BrowserRouter>
     <App />
