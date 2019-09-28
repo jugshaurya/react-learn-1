@@ -8,6 +8,8 @@ import MoviesPage from "./components/routes/moviesPage";
 import AddMoviePage from "./components/routes/addMoviePage";
 import LaterPage from "./components/routes/laterPage";
 import MoviePage from "./components/routes/moviePage";
+import LoginPage from "./components/routes/LoginPage";
+import RegisterPage from "./components/routes/RegisterPage";
 
 const App = () => {
   return (
@@ -15,6 +17,8 @@ const App = () => {
       <Navbar />
       <div className="container content">
         <Switch>
+          <Route path="/login" component={LoginPage} />
+          <Route path="/register" component={RegisterPage} />
           <Route path="/movies/:id" component={MoviePage} />
           <Route path="/movies" component={MoviesPage} />
           <Route path="/add" component={AddMoviePage} />

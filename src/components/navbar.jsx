@@ -29,6 +29,12 @@ const Navbar = () => {
           <NavLink className="nav-link nav-item" to="/later">
             Watch-Later
           </NavLink>
+          <NavLink className="nav-link nav-item" to="/login">
+            Login
+          </NavLink>
+          <NavLink className="nav-link nav-item" to="/register">
+            Register
+          </NavLink>
         </ul>
       </div>
     </nav>
