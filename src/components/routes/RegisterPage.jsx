@@ -65,21 +65,6 @@ class RegisterPage extends React.Component {
     return Object.keys(errors).length > 0 ? errors : null;
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-
-    // Validation
-    const errors = this.validate();
-
-    // errors is always going to be a object , can never be null
-    this.setState({ errors: errors || {} });
-
-    if (errors) return;
-
-    // call the server
-    console.log("Submitted..");
-  };
-
   handleChange = e => {
     const field = e.target.name;
     const value = e.target.value;
@@ -103,6 +88,23 @@ class RegisterPage extends React.Component {
     }
 
     this.setState({ errors });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+
+    // Validation
+    const errors = this.validate();
+
+    // errors is always going to be a object , can never be null
+    this.setState({ errors: errors || {} });
+
+    if (errors) return;
+
+    // call the server to register the User
+    fetch("localhost");
+
+    console.log("Submitted..");
   };
 
   render() {
@@ -139,7 +141,11 @@ class RegisterPage extends React.Component {
             onChange={this.handleChange}
             error={this.state.errors["password"]}
           />
-          <button type="submit" className="btn btn-primary">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={this.validate()}
+          >
             Register
           </button>
         </form>

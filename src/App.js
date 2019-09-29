@@ -24,7 +24,7 @@ const App = () => {
           <Route path="/add" component={AddMoviePage} />
           <Route path="/later" component={LaterPage} />
           <Route path="/not-found" component={NotFoundPage} />
-          <Redirect from="/" exact to="/movies" />
+          <Redirect from="/" exact to="/login" />
           <Redirect to="/not-found" />
         </Switch>
       </div>

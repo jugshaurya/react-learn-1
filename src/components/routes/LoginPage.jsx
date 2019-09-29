@@ -131,13 +131,12 @@ class LoginPage extends React.Component {
           </button>
         </form>
         <div style={{ textAlign: "center" }}>
-          New User{" "}
+          New User?{" "}
           <Link
             style={{ fontSize: 20, textDecoration: "underline" }}
             to="/register"
           >
-            {" "}
-            Register{" "}
+            Register
           </Link>
         </div>
       </div>

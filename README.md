@@ -66,3 +66,9 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+### Auth
+
+- created a user collection to store users
+- encrypt the password using bcrypt
+- store in db if not alreasdy exist and send response accordingly

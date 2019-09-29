@@ -6,8 +6,8 @@ import Pagination from "../pagination";
 import ListGroup from "../listgroup";
 
 //  helper function
-import { getMovies } from "../services/fakeMovieService";
-import { getGenres } from "../services/fakeGenreService";
+import { getMovies } from "../../services/fakeMovieService";
+import { getGenres } from "../../services/fakeGenreService";
 import { filterMovies, sortMovies, paginate } from "../utils/helper";
 
 class MoviesPage extends React.Component {
