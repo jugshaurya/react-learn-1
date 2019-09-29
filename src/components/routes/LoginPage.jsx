@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import RegisterPage from "./RegisterPage";
 
 const Input = ({ label, name, value, onChange, type = "text", error }) => {
   return (
@@ -120,10 +122,24 @@ class LoginPage extends React.Component {
             onChange={this.handleChange}
             error={this.state.errors["password"]}
           />
-          <button type="submit" className="btn btn-primary">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={this.validate()}
+          >
             Login
           </button>
         </form>
+        <div style={{ textAlign: "center" }}>
+          New User{" "}
+          <Link
+            style={{ fontSize: 20, textDecoration: "underline" }}
+            to="/register"
+          >
+            {" "}
+            Register{" "}
+          </Link>
+        </div>
       </div>
     );
   }
