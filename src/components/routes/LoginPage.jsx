@@ -1,106 +1,125 @@
-import React, { Component } from "react";
-// Controlled Component- Components controlled by React with form values stored in state
-class LoginPage extends Component {
+import React from "react";
+
+const Input = ({ label, name, value, onChange, type = "text", error }) => {
+  return (
+    <div className="form-group">
+      <label htmlFor={name}>{label}</label>
+      <input
+        autoComplete={name}
+        className="form-control"
+        type={type}
+        id={name}
+        value={value}
+        name={name}
+        onChange={onChange}
+      />
+      {error && <div className="alert alert-danger">{error}</div>}
+    </div>
+  );
+};
+
+class LoginPage extends React.Component {
   state = {
-    username: "",
-    password: "",
+    data: { username: "", password: "" },
     errors: {}
   };
 
-  checkUsername = username => {
-    if (username.trim() === "") return "Username Should not be Empty";
-    if (username.trim().length < 3)
-      return "Username must be atleast 3 in length";
+  formStyle = {
+    background: "teal",
+    padding: 20,
+    color: "white",
+    fontWeight: 800,
+    borderRadius: 20
+  };
+
+  validateUsername = username => {
+    if (username.trim() === "") return "Username should not be Empty";
+    if (username.trim().length < 3) return "Length must be atleast 3";
     return null;
   };
 
-  checkPassword = password => {
-    if (password.trim() === "") return "Password Should not be Empty";
-    if (password.trim().length < 3)
-      return "Password must be atleast 3 in length";
+  validatePassword = password => {
+    if (password.trim() === "") return "Password should not be Empty";
+    if (password.trim().length < 3) return "Length must be atleast 3";
     return null;
   };
 
-  handleChange = ({ target: input }) => {
+  validate = () => {
     const errors = {};
-    if (input.name === "username") {
-      errors["username"] = this.checkUsername(input.value);
-    }
+    const { username, password } = this.state.data;
 
-    if (input.name === "password") {
-      errors["password"] = this.checkPassword(input.value);
-    }
+    const checkUsername = this.validateUsername(username);
+    if (checkUsername) errors["username"] = checkUsername;
 
-    // batched / merged
-    this.setState({ [input.name]: input.value });
-    this.setState({ errors });
+    const checkPassword = this.validatePassword(password);
+    if (checkPassword) errors["password"] = checkPassword;
+
+    return Object.keys(errors).length > 0 ? errors : null;
   };
 
-  handleFormSubmit = e => {
+  handleSubmit = e => {
     e.preventDefault();
-    const input = e.target;
+
+    // Validation
+    const errors = this.validate();
+
+    // errors is always going to be a object , can never be null
+    this.setState({ errors: errors || {} });
+
+    if (errors) return;
+
+    // call the server
+    console.log("Submitted..");
+  };
+
+  handleChange = e => {
+    const field = e.target.name;
+    const value = e.target.value;
+
+    const data = { ...this.state.data };
+    data[field] = value;
+    this.setState({ data });
+
     const errors = {};
-    const nameError = this.checkUsername(input["username"].value);
-    const passError = this.checkPassword(input["password"].value);
-    if (nameError) errors["username"] = nameError;
-    if (passError) errors["password"] = passError;
+    if (field === "username") {
+      const checkUsername = this.validateUsername(value);
+      if (checkUsername) errors["username"] = checkUsername;
+    } else if (field === "password") {
+      const checkPassword = this.validatePassword(value);
+      if (checkPassword) errors["password"] = checkPassword;
+    } else {
+      console.log("What the fuck!");
+    }
+
     this.setState({ errors });
   };
 
   render() {
+    const { username, password } = this.state.data;
+
     return (
-      <div className="container mt-2">
+      <div className="container mt-5">
         <h3>Login Page</h3>
         <form
-          onSubmit={this.handleFormSubmit}
           className="mt-5"
-          style={{
-            background: "teal",
-            padding: 20,
-            color: "white",
-            fontWeight: 800,
-            borderRadius: 20
-          }}
+          style={this.formStyle}
+          onSubmit={this.handleSubmit}
         >
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <input
-              className="form-control"
-              id="username"
-              type="text"
-              placeholder="Enter Username"
-              value={this.state.username}
-              onChange={this.handleChange}
-              name="username"
-            />
-            {this.state.errors["username"] ? (
-              <div className="alert alert-danger mt-1" role="alert">
-                {this.state.errors["username"]}
-              </div>
-            ) : (
-              ""
-            )}
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              className="form-control"
-              id="password"
-              type="password"
-              placeholder="Enter Password"
-              autoComplete="current-pass"
-              value={this.state.password}
-              onChange={this.handleChange}
-              name="password"
-            />
-            {this.state.errors["password"] ? (
-              <div className="alert alert-danger mt-1" role="alert">
-                {this.state.errors["password"]}
-              </div>
-            ) : (
-              ""
-            )}
-          </div>
+          <Input
+            value={username}
+            label="Username"
+            name="username"
+            onChange={this.handleChange}
+            error={this.state.errors["username"]}
+          />
+          <Input
+            value={password}
+            label="Password"
+            name="password"
+            type="password"
+            onChange={this.handleChange}
+            error={this.state.errors["password"]}
+          />
           <button type="submit" className="btn btn-primary">
             Login
           </button>
@@ -109,4 +128,5 @@ class LoginPage extends Component {
     );
   }
 }
+
 export default LoginPage;
