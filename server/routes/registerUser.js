@@ -1,12 +1,12 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-const route = express.Router();
+const jwt = require("jsonwebtoken");
 
-// Getting User Collection
+const route = express.Router();
 const { Users, validate } = require("../models/users.js");
 
 const generateHashedPassword = async function(pass) {
-  const saltRounds = process.env.saltRounds;
+  const saltRounds = parseInt(process.env.SALT_ROUND);
   const salt = await bcrypt.genSalt(saltRounds);
   const hashedPass = await bcrypt.hash(pass, salt);
   return hashedPass;
@@ -32,11 +32,21 @@ route.post("/", async (req, res) => {
   });
 
   await user.save();
+
   // return account created
-  res.send({
+  const payload = { _id: user._id };
+  const jwtPrivateKey = process.env.jwtPrivateKey;
+  if (!jwtPrivateKey) {
+    console.log("JWT key not available");
+    return res.status(500).json("server Error");
+  }
+  const token = jwt.sign(payload, jwtPrivateKey, { expiresIn: "1d" });
+
+  res.json({
     _id: user._id,
     username: user.username,
-    email: user.email
+    email: user.email,
+    token: token
   });
 });
 

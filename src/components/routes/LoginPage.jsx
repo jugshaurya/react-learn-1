@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import RegisterPage from "./RegisterPage";
 
 const Input = ({ label, name, value, onChange, type = "text", error }) => {
   return (
@@ -20,10 +19,12 @@ const Input = ({ label, name, value, onChange, type = "text", error }) => {
   );
 };
 
+const loginURL = "http://localhost:4000/api/login";
 class LoginPage extends React.Component {
   state = {
     data: { username: "", password: "" },
-    errors: {}
+    client_errors: {},
+    server_errors: {}
   };
 
   formStyle = {
@@ -39,6 +40,7 @@ class LoginPage extends React.Component {
     if (username.trim().length < 3) return "Length must be atleast 3";
     return null;
   };
+  errors;
 
   validatePassword = password => {
     if (password.trim() === "") return "Password should not be Empty";
@@ -47,30 +49,50 @@ class LoginPage extends React.Component {
   };
 
   validate = () => {
-    const errors = {};
+    const client_errors = {};
     const { username, password } = this.state.data;
 
     const checkUsername = this.validateUsername(username);
-    if (checkUsername) errors["username"] = checkUsername;
+    if (checkUsername) client_errors["username"] = checkUsername;
 
     const checkPassword = this.validatePassword(password);
-    if (checkPassword) errors["password"] = checkPassword;
+    if (checkPassword) client_errors["password"] = checkPassword;
 
-    return Object.keys(errors).length > 0 ? errors : null;
+    return Object.keys(client_errors).length > 0 ? client_errors : null;
   };
 
-  handleSubmit = e => {
+  handleLogin = async e => {
+    const response = await fetch(loginURL, {
+      method: "POST",
+      body: JSON.stringify({
+        username: this.state.data.username,
+        password: this.state.data.password
+      }),
+      headers: {
+        "Content-Type": "application/json;charset=utf-8"
+      }
+    });
+
+    const server_errors = {};
+    if (response.status < 200 || response.status > 210) {
+      server_errors.error = await response.json();
+      this.setState({ server_errors });
+      return;
+    }
+    this.setState({ server_errors: {} });
+    window.location = "/movies";
+  };
+
+  handleSubmit = async e => {
     e.preventDefault();
-
-    // Validation
-    const errors = this.validate();
-
-    // errors is always going to be a object , can never be null
-    this.setState({ errors: errors || {} });
-
-    if (errors) return;
+    const client_errors = this.validate();
+    this.setState({ errors: client_errors || {} });
+    if (client_errors) return;
 
     // call the server
+    await this.handleLogin();
+    // if response
+
     console.log("Submitted..");
   };
 
@@ -82,18 +104,18 @@ class LoginPage extends React.Component {
     data[field] = value;
     this.setState({ data });
 
-    const errors = {};
+    const client_errors = {};
     if (field === "username") {
       const checkUsername = this.validateUsername(value);
-      if (checkUsername) errors["username"] = checkUsername;
+      if (checkUsername) client_errors["username"] = checkUsername;
     } else if (field === "password") {
       const checkPassword = this.validatePassword(value);
-      if (checkPassword) errors["password"] = checkPassword;
+      if (checkPassword) client_errors["password"] = checkPassword;
     } else {
       console.log("What the fuck!");
     }
 
-    this.setState({ errors });
+    this.setState({ client_errors });
   };
 
   render() {
@@ -107,12 +129,17 @@ class LoginPage extends React.Component {
           style={this.formStyle}
           onSubmit={this.handleSubmit}
         >
+          {this.state.server_errors.error && (
+            <div className="alert alert-danger">
+              {this.state.server_errors.error}
+            </div>
+          )}
           <Input
             value={username}
             label="Username"
             name="username"
             onChange={this.handleChange}
-            error={this.state.errors["username"]}
+            error={this.state.client_errors["username"]}
           />
           <Input
             value={password}
@@ -120,7 +147,7 @@ class LoginPage extends React.Component {
             name="password"
             type="password"
             onChange={this.handleChange}
-            error={this.state.errors["password"]}
+            error={this.state.client_errors["password"]}
           />
           <button
             type="submit"
