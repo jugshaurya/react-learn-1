@@ -1,12 +1,14 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = props => {
+  const user = props.user;
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <Link className="navbar-brand" to="/">
         RememberMyMovies
       </Link>
+
       <button
         className="navbar-toggler"
         type="button"
@@ -20,21 +22,34 @@ const Navbar = () => {
       </button>
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav">
-          <NavLink className="nav-link nav-item" to="/add">
-            Add-Movies <span className="sr-only">(current)</span>
-          </NavLink>
-          <NavLink className="nav-link nav-item" to="/movies">
-            Saved-Movies
-          </NavLink>
-          <NavLink className="nav-link nav-item" to="/later">
-            Watch-Later
-          </NavLink>
-          <NavLink className="nav-link nav-item" to="/login">
-            Login
-          </NavLink>
-          <NavLink className="nav-link nav-item" to="/register">
-            Register
-          </NavLink>
+          {user ? (
+            <>
+              <NavLink className="nav-link nav-item" to="/add">
+                Add-Movies
+              </NavLink>
+              <NavLink className="nav-link nav-item" to="/movies">
+                Saved-Movies
+              </NavLink>
+              <NavLink className="nav-link nav-item" to="/later">
+                Watch-Later
+              </NavLink>
+              <NavLink className="nav-link nav-item" to="/profile">
+                {user}
+              </NavLink>
+              <NavLink className="nav-link nav-item" to="/logout">
+                Logout
+              </NavLink>
+            </>
+          ) : (
+            <>
+              <NavLink className="nav-link nav-item" to="/login">
+                Login
+              </NavLink>
+              <NavLink className="nav-link nav-item" to="/register">
+                Register
+              </NavLink>
+            </>
+          )}
         </ul>
       </div>
     </nav>

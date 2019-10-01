@@ -15,15 +15,16 @@ const generateHashedPassword = async function(pass) {
 route.post("/", async (req, res) => {
   // TODO: Validate the body return 400 if not Valid else proceed...
   const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.message);
+  if (error) return res.status(400).json(error.message);
   // find out if user is already present in db by email or username
   // if yes return user is already registered
   let user = await Users.findOne({ email: req.body.email });
-  if (user) return res.status(400).send("Email already Registered");
+  if (user) return res.status(400).json("Email already Registered");
   user = await Users.findOne({ username: req.body.username });
-  if (user) return res.status(400).send("Username already taken");
+  if (user) return res.status(400).json("Username already taken");
 
   const hashedPass = await generateHashedPassword(req.body.password);
+
   // else create an account
   user = new Users({
     username: req.body.username,
@@ -31,16 +32,15 @@ route.post("/", async (req, res) => {
     password: hashedPass
   });
 
-  await user.save();
-
-  // return account created
-  const payload = { _id: user._id };
+  const payload = { _id: user._id, username: user.username };
   const jwtPrivateKey = process.env.jwtPrivateKey;
   if (!jwtPrivateKey) {
     console.log("JWT key not available");
-    return res.status(500).json("server Error");
+    return res.status(500).json("Server Error");
   }
-  const token = jwt.sign(payload, jwtPrivateKey, { expiresIn: "1d" });
+
+  await user.save();
+  const token = jwt.sign(payload, jwtPrivateKey, { expiresIn: "1m" });
 
   res.json({
     _id: user._id,

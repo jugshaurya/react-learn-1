@@ -73,13 +73,15 @@ class LoginPage extends React.Component {
       }
     });
 
+    const token = await response.json();
     const server_errors = {};
     if (response.status < 200 || response.status > 210) {
-      server_errors.error = await response.json();
+      server_errors.error = token;
       this.setState({ server_errors });
       return;
     }
     this.setState({ server_errors: {} });
+    localStorage.setItem("token", token);
     window.location = "/movies";
   };
 
@@ -91,9 +93,6 @@ class LoginPage extends React.Component {
 
     // call the server
     await this.handleLogin();
-    // if response
-
-    console.log("Submitted..");
   };
 
   handleChange = e => {

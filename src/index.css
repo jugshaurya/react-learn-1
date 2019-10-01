@@ -18,3 +18,35 @@ i,
 .list-group > li {
   cursor: pointer;
 }
+
+.result {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1em;
+}
+
+.card {
+  font-size: 0.8em;
+  position: relative;
+  max-width: 300px;
+  border: 30px solid red;
+}
+
+.card > img {
+  width: 100%;
+}
+.save-btn {
+  position: absolute;
+  right: -25px;
+  top: -25px;
+}
+
+.save-btn > h5 {
+  position: absolute;
+  right: 10px;
+  top: 50px;
+  font: 0.5em;
+  background: black;
+  font-weight: bolder;
+  color: white;
+}

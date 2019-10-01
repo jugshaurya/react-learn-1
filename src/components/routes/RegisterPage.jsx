@@ -20,7 +20,8 @@ const Input = ({ label, name, value, onChange, type = "text", error }) => {
 class RegisterPage extends React.Component {
   state = {
     data: { username: "", email: "", password: "" },
-    errors: {}
+    client_errors: {},
+    server_errors: {}
   };
 
   formStyle = {
@@ -50,19 +51,19 @@ class RegisterPage extends React.Component {
   };
 
   validate = () => {
-    const errors = {};
+    const client_errors = {};
     const { username, email, password } = this.state.data;
 
     const checkUsername = this.validateUsername(username);
-    if (checkUsername) errors["username"] = checkUsername;
+    if (checkUsername) client_errors["username"] = checkUsername;
 
     const checkEmail = this.validateEmail(email);
-    if (checkEmail) errors["email"] = checkEmail;
+    if (checkEmail) client_errors["email"] = checkEmail;
 
     const checkPassword = this.validatePassword(password);
-    if (checkPassword) errors["password"] = checkPassword;
+    if (checkPassword) client_errors["password"] = checkPassword;
 
-    return Object.keys(errors).length > 0 ? errors : null;
+    return Object.keys(client_errors).length > 0 ? client_errors : null;
   };
 
   handleChange = e => {
@@ -73,38 +74,65 @@ class RegisterPage extends React.Component {
     data[field] = value;
     this.setState({ data });
 
-    const errors = {};
+    const client_errors = {};
     if (field === "username") {
       const checkUsername = this.validateUsername(value);
-      if (checkUsername) errors["username"] = checkUsername;
+      if (checkUsername) client_errors["username"] = checkUsername;
     } else if (field === "email") {
       const checkEmail = this.validateEmail(value);
-      if (checkEmail) errors["email"] = checkEmail;
+      if (checkEmail) client_errors["email"] = checkEmail;
     } else if (field === "password") {
       const checkPassword = this.validatePassword(value);
-      if (checkPassword) errors["password"] = checkPassword;
+      if (checkPassword) client_errors["password"] = checkPassword;
     } else {
       console.log("What the fuck!");
     }
 
-    this.setState({ errors });
+    this.setState({ client_errors });
   };
 
-  handleSubmit = e => {
+  handleRegistration = async () => {
+    const registerURL = "http://localhost:4000/api/register";
+
+    const response = await fetch(registerURL, {
+      method: "POST",
+      body: JSON.stringify({
+        username: this.state.data.username,
+        email: this.state.data.email,
+        password: this.state.data.password
+      }),
+      headers: {
+        "Content-Type": "application/json;charset=utf-8"
+      }
+    });
+
+    const data = await response.json();
+    const server_errors = {};
+    if (response.status < 200 || response.status > 210) {
+      server_errors.error = data;
+      this.setState({ server_errors });
+      return;
+    }
+
+    this.setState({ server_errors: {} });
+    // console.log(localStorage);
+    localStorage.setItem("token", data.token);
+    window.location = "/movies";
+  };
+
+  handleSubmit = async e => {
     e.preventDefault();
 
     // Validation
-    const errors = this.validate();
+    const client_errors = this.validate();
 
-    // errors is always going to be a object , can never be null
-    this.setState({ errors: errors || {} });
+    // client_errors is always going to be a object , can never be null
+    this.setState({ client_errors: client_errors || {} });
 
-    if (errors) return;
+    if (client_errors) return;
 
     // call the server to register the User
-    fetch("localhost");
-
-    console.log("Submitted..");
+    await this.handleRegistration();
   };
 
   render() {
@@ -118,12 +146,17 @@ class RegisterPage extends React.Component {
           style={this.formStyle}
           onSubmit={this.handleSubmit}
         >
+          {this.state.server_errors.error && (
+            <div className="alert alert-danger">
+              {this.state.server_errors.error}
+            </div>
+          )}
           <Input
             value={username}
             label="Username"
             name="username"
             onChange={this.handleChange}
-            error={this.state.errors["username"]}
+            error={this.state.client_errors["username"]}
           />
           <Input
             value={email}
@@ -131,7 +164,7 @@ class RegisterPage extends React.Component {
             name="email"
             type="email"
             onChange={this.handleChange}
-            error={this.state.errors["email"]}
+            error={this.state.client_errors["email"]}
           />
           <Input
             value={password}
@@ -139,12 +172,12 @@ class RegisterPage extends React.Component {
             name="password"
             type="password"
             onChange={this.handleChange}
-            error={this.state.errors["password"]}
+            error={this.state.client_errors["password"]}
           />
           <button
             type="submit"
             className="btn btn-primary"
-            disabled={this.validate()}
+            // disabled={this.validate()}
           >
             Register
           </button>

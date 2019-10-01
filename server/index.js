@@ -5,6 +5,7 @@ const app = express();
 const cors = require("cors");
 const registerRoute = require("./routes/registerUser");
 const loginRoute = require("./routes/loginUser");
+const moviesRoute = require("./routes/movies");
 
 require("dotenv").config();
 app.use(express.json());
@@ -24,6 +25,7 @@ mongoose
   .then(() => console.log("Connected to DB..."))
   .catch(err => console.log(err, "Not Connected to DB..."));
 
+app.use("/api/movies", moviesRoute);
 app.use("/api/register", registerRoute);
 app.use("/api/login", loginRoute);
 
