@@ -7,7 +7,6 @@ const route = express.Router();
 const { Users } = require("../models/users.js");
 
 route.post("/", async (req, res) => {
-  console.log(req.body);
   // TODO: Validate the body return 400 if not Valid else proceed...
   const data = {
     username: req.body.username,
